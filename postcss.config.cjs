@@ -2,10 +2,10 @@ module.exports = {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
-  }
-}
+  },
+};
 
-/*ES6 config
+/* ES6 config
 import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 
