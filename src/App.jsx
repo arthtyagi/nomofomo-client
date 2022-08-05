@@ -1,72 +1,23 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import { logIn, refreshToken } from './services/AuthService';
 import { UserContext } from './services/userContext';
 import './App.css';
 
 function App() {
-  const [resp, changeResponse] = useState(null);
   const [username, changeUsername] = useState('');
   const [password, changePassword] = useState('');
   const loggedInUser = useContext(UserContext);
-  const headers = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  };
-  const logIn = async (username, password) => {
-    const url = 'http://localhost:8000/dj-rest-auth/login/';
-    const response = await axios.post(url, {
-      username,
-      password,
-      headers,
-      credentials: 'same-origin',
-      withCredentials: true,
-    }).then((resp) => {
-      changeResponse(resp.data);
-      // console.log('resp.data ->', resp.data);
-      localStorage.setItem('token', resp.data.access_token);
-      localStorage.setItem('refresh', resp.data.refresh_token);
-    }).catch((error) => console.log('error ->', error));
-    return response;
-  };
 
-  // todo: verify only after a specified interval:
   useEffect(() => {
-    if (localStorage.getItem('token') || localStorage.getItem('refresh')) {
-      axios
-        .post('http://localhost:8000/dj-rest-auth/token/verify/', {
-          token: localStorage.getItem('token'),
-          headers,
-          credentials: 'same-origin',
-          withCredentials: true,
-        }).then((resp) => {
-          changeResponse(resp.data);
-          console.log('Verified');
-        }).catch((e) => {
-          console.log(e);
-          // refresh token and verify again
-          return axios.post('http://localhost:8000/dj-rest-auth/token/refresh/', {
-            refresh: localStorage.getItem('refresh'),
-            headers,
-            credentials: 'same-origin',
-            withCredentials: true,
-          }).then((resp) => {
-            changeResponse(resp);
-            console.log('Refreshed');
-            // store access token in js memory
-            localStorage.setItem('token', resp.data.access);
-          }).catch((error) => console.log('error ->', error));
-        });
+    if (loggedInUser) {
+      setInterval(refreshToken, 1000 * 60 * 60 * 12); // refresh token every 12 hours
     }
-  }, []);
-  // check for existing token; if not present, login. if present, verify token
+  }, [loggedInUser]);
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!localStorage.getItem('token') && !localStorage.getItem('refresh')) {
-      try {
-        logIn(username, password);
-      } catch (e) {
-        console.log(e);
-      }
+    if (!loggedInUser) {
+      await logIn(username, password);
     }
   };
 
@@ -76,16 +27,6 @@ function App() {
         <h1>
           {loggedInUser ? `Welcome, ${loggedInUser.username}` : 'Login'}
         </h1>
-        <div>
-          {resp
-            && (
-            <div className="response">
-              <code>
-                {JSON.stringify(resp)}
-              </code>
-            </div>
-            )}
-        </div>
         <div>
           <form onSubmit={onSubmit}>
             <div>

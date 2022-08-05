@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-export default function getUser() {
+const headers = {
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+};
+
+export async function getUser() {
   const token = localStorage.getItem('token');
   if (token) {
     // return user data
@@ -11,4 +16,36 @@ export default function getUser() {
     }).then((resp) => resp).catch((error) => console.log('error ->', error));
   }
   return null;
+}
+
+export async function logIn(username, password) {
+  const url = 'http://localhost:8000/dj-rest-auth/login/';
+  const response = await axios.post(url, {
+    username,
+    password,
+    headers,
+    credentials: 'same-origin',
+    withCredentials: true,
+  }).then((resp) => {
+    // console.log('resp.data ->', resp.data);
+    localStorage.setItem('token', resp.data.access_token);
+    localStorage.setItem('refresh', resp.data.refresh_token);
+  }).catch(() => {
+    // console.log(error);
+  });
+  return response;
+}
+
+export async function refreshToken() {
+  const url = 'http://localhost:8000/dj-rest-auth/token/refresh/';
+  const response = await axios.post(url, {
+    refresh: localStorage.getItem('refresh'),
+    headers,
+    credentials: 'same-origin',
+    withCredentials: true,
+  }).then((resp) => {
+    // console.log('resp.data ->', resp.data);
+    localStorage.setItem('token', resp.data.access);
+  }).catch(() => {});
+  return response;
 }

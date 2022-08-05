@@ -10,7 +10,7 @@ userId
 
 import React, { useEffect, useReducer, createContext } from 'react';
 import PropTypes from 'prop-types';
-import getUser from './AuthService';
+import { getUser } from './AuthService';
 
 export const UserContext = createContext();
 export const UserDispatch = createContext();
@@ -31,12 +31,14 @@ export function UserProvider({ children }) {
   const [loggedInUser, dispatch] = useReducer(userReducer, {});
   useEffect(
     () => {
-      getUser().then((resp) => {
-        // console.log('userData ->', userData.data);
-        dispatch({ type: 'SET_USER_DATA', userData: resp.data });
-      }).catch((error) => {
-        console.log(error);
-      });
+      if (getUser() !== null) {
+        getUser().then((resp) => {
+          // console.log('userData ->', resp.data);
+          dispatch({ type: 'SET_USER_DATA', userData: resp.data });
+        }).catch(() => {
+          // console.log(error);
+        });
+      }
     },
     [],
   );
