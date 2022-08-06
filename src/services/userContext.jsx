@@ -35,7 +35,9 @@ export function UserProvider({ children }) {
         getUser().then((resp) => {
           // console.log('userData ->', resp.data);
           dispatch({ type: 'SET_USER_DATA', userData: resp.data });
+          localStorage.setItem('loggedIn', true);
         }).catch(() => {
+          localStorage.setItem('loggedIn', false);
           // console.log(error);
         });
       }
