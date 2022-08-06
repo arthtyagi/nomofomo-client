@@ -13,7 +13,7 @@ export async function getUser() {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }).then((resp) => resp).catch((error) => console.log('error ->', error));
+    }).then((resp) => resp).catch(() => {});
   }
   return null;
 }
@@ -30,8 +30,6 @@ export async function logIn(username, password) {
     // console.log('resp.data ->', resp.data);
     localStorage.setItem('token', resp.data.access_token);
     localStorage.setItem('refresh', resp.data.refresh_token);
-  }).catch(() => {
-    // console.log(error);
   });
   return response;
 }

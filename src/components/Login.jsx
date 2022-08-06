@@ -11,30 +11,31 @@ function Login() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    try {
-      if (!loggedInUser) {
+    if (!loggedInUser) {
+      try {
         await logIn(username, password);
-      }
-      changeIsSubmitted(true);
-      getUser().then((resp) => {
+        changeIsSubmitted(true);
+        getUser().then((resp) => {
         // add delay to simulate loading
-        setTimeout(() => {
-          dispatch({ type: 'SET_USER_DATA', userData: resp.data });
-          localStorage.setItem('loggedIn', true);
-        }, 1500);
-      }).catch(() => {
-        localStorage.setItem('loggedIn', false);
-        // console.log(error);
-      });
-    } catch (error) {
-      // console.log(error);
+          setTimeout(() => {
+            dispatch({ type: 'SET_USER_DATA', userData: resp.data });
+            localStorage.setItem('loggedIn', true);
+          }, 1500);
+        }).catch(() => {
+          localStorage.setItem('loggedIn', false);
+        });
+      } catch (error) {
+        changeIsSubmitted(false);
+        changeUsername('');
+        changePassword('');
+      }
     }
   };
 
   return (
     <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
       <div className="max-w-lg mx-auto">
-        <h1 className="text-2xl font-bold text-center text-indigo-600 sm:text-3xl">{loggedInUser ? `Welcome, ${loggedInUser.username}` : 'Login'}</h1>
+        <h1 className="text-2xl font-light text-center text-black sm:text-3xl">{loggedInUser ? `Welcome, ${loggedInUser.username}` : 'Login'}</h1>
         {!isSubmitted && !loggedInUser ? (
           <form onSubmit={onSubmit} className="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-2xl">
             <div>
@@ -109,7 +110,7 @@ function Login() {
               </label>
             </div>
 
-            <button type="submit" className="block w-full px-5 py-3 text-sm font-medium text-white bg-indigo-600 rounded-xl">
+            <button type="submit" className="block w-full px-5 py-3 text-sm font-medium text-white bg-blue-600 rounded-xl">
               Sign in
             </button>
 
