@@ -3,7 +3,7 @@ import { getUser, logIn } from '../services/AuthService';
 import { UserContext, UserDispatch } from '../services/userContext';
 
 function Login() {
-  const [username, changeUsername] = useState('');
+  const [email, changeEmail] = useState('');
   const [password, changePassword] = useState('');
   const [isSubmitted, changeIsSubmitted] = useState(false);
   const loggedInUser = useContext(UserContext);
@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
     if (!loggedInUser) {
       try {
-        await logIn(username, password);
+        await logIn(email, password);
         changeIsSubmitted(true);
         getUser().then((resp) => {
         // add delay to simulate loading
@@ -26,7 +26,7 @@ function Login() {
         });
       } catch (error) {
         changeIsSubmitted(false);
-        changeUsername('');
+        changeEmail('');
         changePassword('');
       }
     }
@@ -35,20 +35,19 @@ function Login() {
   return (
     <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
       <div className="max-w-lg mx-auto">
-        <h1 className="text-2xl font-light text-center text-black sm:text-3xl">{loggedInUser ? `Welcome, ${loggedInUser.username}` : 'Login'}</h1>
         {!isSubmitted && !loggedInUser ? (
           <form onSubmit={onSubmit} className="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-2xl">
             <div>
-              <label htmlFor="username" className="text-sm font-medium">
-                Username
+              <label htmlFor="email" className="text-sm font-medium">
+                Email
                 <div className="relative mt-1">
                   <input
                     type="input"
-                    id="username"
-                    onChange={(e) => changeUsername(e.target.value)}
-                    value={username}
+                    id="email"
+                    onChange={(e) => changeEmail(e.target.value)}
+                    value={email}
                     className="w-full p-4 pr-12 text-sm border-gray-200 rounded-xl shadow-sm"
-                    placeholder="Enter username"
+                    placeholder="Enter Email"
                   />
 
                   <span className="absolute inset-y-0 inline-flex items-center right-4">

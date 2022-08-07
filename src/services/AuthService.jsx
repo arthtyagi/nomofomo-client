@@ -18,10 +18,10 @@ export async function getUser() {
   return null;
 }
 
-export async function logIn(username, password) {
+export async function logIn(email, password) {
   const url = 'http://localhost:8000/dj-rest-auth/login/';
   const response = await axios.post(url, {
-    username,
+    email,
     password,
     headers,
     credentials: 'same-origin',
