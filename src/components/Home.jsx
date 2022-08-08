@@ -1,10 +1,10 @@
-import { React, useContext } from 'react';
+import { React } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../services/userContext';
+import { useUserContext } from '../services/userContext';
 import { logOut } from '../services/AuthService';
 
 function Home() {
-  const loggedInUser = useContext(UserContext);
+  const loggedInUser = useUserContext();
   const handlelogOut = async () => {
     await logOut();
   };

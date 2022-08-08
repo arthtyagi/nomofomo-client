@@ -5,11 +5,13 @@ const headers = {
   Accept: 'application/json',
 };
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export async function getUser() {
   const token = localStorage.getItem('token');
   if (token) {
     // return user data
-    return axios.get('http://localhost:8000/dj-rest-auth/user/', {
+    return axios.get(`${API_URL}/auth/user/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -19,7 +21,7 @@ export async function getUser() {
 }
 
 export async function logIn(email, password) {
-  const url = 'http://localhost:8000/dj-rest-auth/login/';
+  const url = `${API_URL}/auth/login/`;
   const response = await axios.post(url, {
     email,
     password,
@@ -35,7 +37,7 @@ export async function logIn(email, password) {
 }
 
 export async function refreshToken() {
-  const url = 'http://localhost:8000/dj-rest-auth/token/refresh/';
+  const url = `${API_URL}/auth/token/refresh/`;
   const response = await axios.post(url, {
     refresh: localStorage.getItem('refresh'),
     headers,
@@ -49,7 +51,7 @@ export async function refreshToken() {
 }
 
 export async function logOut() {
-  const url = 'http://localhost:8000/dj-rest-auth/logout/';
+  const url = `${API_URL}/auth/logout/`;
   const response = await axios.post(url, {
     headers,
     credentials: 'same-origin',

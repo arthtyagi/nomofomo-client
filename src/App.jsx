@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { refreshToken } from './services/AuthService';
-import { UserContext } from './services/userContext';
+import { useUserContext } from './services/userContext';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Settings from './components/Settings';
@@ -9,7 +9,7 @@ import Home from './components/Home';
 import './App.css';
 
 function App() {
-  const loggedInUser = useContext(UserContext);
+  const loggedInUser = useUserContext();
 
   useEffect(() => {
     if (loggedInUser) {

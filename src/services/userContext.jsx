@@ -8,7 +8,9 @@ lastName
 userId
 */
 
-import React, { useEffect, useReducer, createContext } from 'react';
+import React, {
+  useEffect, useReducer, createContext, useContext,
+} from 'react';
 import PropTypes from 'prop-types';
 import { getUser } from './AuthService';
 
@@ -56,3 +58,11 @@ export function UserProvider({ children }) {
 UserProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+export function useUserDispatch() {
+  return useContext(UserDispatch);
+}
+
+export function useUserContext() {
+  return useContext(UserContext);
+}

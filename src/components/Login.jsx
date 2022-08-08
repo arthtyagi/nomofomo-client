@@ -1,15 +1,15 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   Formik, Form, Field, ErrorMessage,
 } from 'formik';
 import { getUser, logIn } from '../services/AuthService';
-import { UserContext, UserDispatch } from '../services/userContext';
+import { useUserContext, useUserDispatch } from '../services/userContext';
 
 function Login() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loginError, setLoginError] = useState(false);
-  const loggedInUser = useContext(UserContext);
-  const dispatch = useContext(UserDispatch);
+  const loggedInUser = useUserContext();
+  const dispatch = useUserDispatch();
 
   const validate = (values) => {
     const errors = {};
@@ -35,7 +35,10 @@ function Login() {
       getUser().then((resp) => {
         // add delay to simulate loading
         setTimeout(() => {
-          dispatch({ type: 'SET_USER_DATA', userData: resp.data });
+          dispatch({
+            type: 'SET_USER_DATA',
+            userData: resp.data,
+          });
           localStorage.setItem('loggedIn', true);
         }, 1000);
       }).catch(() => {
