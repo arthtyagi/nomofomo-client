@@ -47,3 +47,19 @@ export async function refreshToken() {
   }).catch(() => {});
   return response;
 }
+
+export async function logOut() {
+  const url = 'http://localhost:8000/dj-rest-auth/logout/';
+  const response = await axios.post(url, {
+    headers,
+    credentials: 'same-origin',
+    withCredentials: true,
+  }).then(() => {
+    // console.log('resp.data ->', resp.data);
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh');
+    localStorage.removeItem('loggedIn');
+    window.location.href = '/';
+  }).catch(() => {});
+  return response;
+}

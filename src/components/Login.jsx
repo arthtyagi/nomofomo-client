@@ -37,7 +37,7 @@ function Login() {
         setTimeout(() => {
           dispatch({ type: 'SET_USER_DATA', userData: resp.data });
           localStorage.setItem('loggedIn', true);
-        }, 2000);
+        }, 1000);
       }).catch(() => {
         localStorage.setItem('loggedIn', false);
       });
@@ -51,7 +51,8 @@ function Login() {
   return (
     <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
       <div className="max-w-lg mx-auto">
-        <h1 className="text-2xl font-light text-center text-black sm:text-3xl">Sign In</h1>
+        <h1 className="text-3xl font-bold text-center text-black">Sign In</h1>
+        <br />
         {
         loginError
         && (
@@ -71,7 +72,7 @@ function Login() {
             }}
           >
             {({ isSubmitting }) => (
-              <Form className="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-2xl">
+              <Form className="p-8 mt-6 mb-0 space-y-4 rounded-xl shadow-2xl">
                 <label htmlFor="email" className="text-lg">
                   Email
                   <div className="relative mt-1">
@@ -148,7 +149,7 @@ function Login() {
         ) : (
           <div className="p-8 mt-6 mb-0 space-y-4 rounded-xl shadow-2xl">
             <p className="text-center text-gray-500">
-              Signing in ...
+              Signing in ... 🚀
             </p>
           </div>
         )}
