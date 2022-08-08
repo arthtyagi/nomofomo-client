@@ -72,7 +72,7 @@ function Login() {
           >
             {({ isSubmitting }) => (
               <Form className="p-8 mt-6 mb-0 space-y-4 rounded-lg shadow-2xl">
-                <label htmlFor="email" className="text-sm font-medium">
+                <label htmlFor="email" className="text-lg">
                   Email
                   <div className="relative mt-1">
                     <Field
@@ -98,9 +98,10 @@ function Login() {
                       </svg>
                     </span>
                   </div>
-                  <ErrorMessage name="email" component="div" />
+                  <ErrorMessage name="email" component="div" className="text-red-400 text-sm" />
                 </label>
-                <label htmlFor="password" className="text-sm font-medium">
+                <br />
+                <label htmlFor="password" className="text-lg">
                   Password
                   <div className="relative mt-1">
                     <Field
@@ -128,7 +129,7 @@ function Login() {
                       </svg>
                     </span>
                   </div>
-                  <ErrorMessage name="password" component="div" />
+                  <ErrorMessage name="password" component="div" className="text-red-400 text-sm" />
                 </label>
                 <button
                   type="submit"
