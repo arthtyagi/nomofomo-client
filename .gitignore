@@ -24,4 +24,5 @@ dist-ssr
 *.sw?
 *.swp
 # all .env files
+.env*
 .env.*
