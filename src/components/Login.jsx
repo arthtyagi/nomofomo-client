@@ -6,73 +6,68 @@ import { getUser, logIn } from '../services/AuthService';
 import { UserContext, UserDispatch } from '../services/userContext';
 
 function Login() {
-  const [isSubmitted, changeIsSubmitted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loginError, setLoginError] = useState(false);
   const loggedInUser = useContext(UserContext);
   const dispatch = useContext(UserDispatch);
 
-  // const onSubmit = async (e, values) => {
-  //   e.preventDefault();
-  //   const { email } = values;
-  //   const { password } = values;
-  //   if (!loggedInUser) {
-  //     try {
-  //       await logIn(email, password);
-  //       changeIsSubmitted(true);
-  //       getUser().then((resp) => {
-  //       // add delay to simulate loading
-  //         setTimeout(() => {
-  //           dispatch({ type: 'SET_USER_DATA', userData: resp.data });
-  //           localStorage.setItem('loggedIn', true);
-  //         }, 1500);
-  //       }).catch(() => {
-  //         localStorage.setItem('loggedIn', false);
-  //       });
-  //     } catch (error) {
-  //       changeIsSubmitted(false);
-  //       changeEmail('');
-  //       changePassword('');
-  //     }
-  //   }
-  // };
+  const validate = (values) => {
+    const errors = {};
+    if (!values.email) {
+      errors.email = 'Required';
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+      errors.email = 'Invalid email address';
+    }
+    if (!values.password) {
+      errors.password = 'Required';
+    }
+    return errors;
+  };
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const { email, password } = values;
+      await logIn(email, password);
+      setIsSubmitted(true);
+      if (loginError) {
+        setLoginError(false);
+      }
+      setSubmitting(false);
+      getUser().then((resp) => {
+        // add delay to simulate loading
+        setTimeout(() => {
+          dispatch({ type: 'SET_USER_DATA', userData: resp.data });
+          localStorage.setItem('loggedIn', true);
+        }, 2000);
+      }).catch(() => {
+        localStorage.setItem('loggedIn', false);
+      });
+    } catch (error) {
+      setIsSubmitted(false);
+      setLoginError(true);
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
       <div className="max-w-lg mx-auto">
         <h1 className="text-2xl font-light text-center text-black sm:text-3xl">Sign In</h1>
+        {
+        loginError
+        && (
+        <div className="text-sm text-center text-red-500">
+          <p className="p-8 mt-6 mb-0 space-y-4 rounded-xl shadow-2xl">
+            Invalid username or password.
+          </p>
+        </div>
+        )
+        }
         {!isSubmitted && !loggedInUser ? (
           <Formik
             initialValues={{ email: '', password: '' }}
-            validate={(values) => {
-              const errors = {};
-              if (!values.email) {
-                errors.email = 'Required';
-              } else if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-              ) {
-                errors.email = 'Invalid email address';
-              }
-              return errors;
-            }}
-            onSubmit={async (values, { setSubmitting }) => {
-              if (!loggedInUser) {
-                try {
-                  const { email, password } = values;
-                  await logIn(email, password);
-                  changeIsSubmitted(true);
-                  setSubmitting(false);
-                  getUser().then((resp) => {
-                    // add delay to simulate loading
-                    setTimeout(() => {
-                      dispatch({ type: 'SET_USER_DATA', userData: resp.data });
-                      localStorage.setItem('loggedIn', true);
-                    }, 1500);
-                  }).catch(() => {
-                    localStorage.setItem('loggedIn', false);
-                  });
-                } catch (error) {
-                  changeIsSubmitted(false);
-                }
-              }
+            validate={validate}
+            onSubmit={(values, { setSubmitting }) => {
+              handleSubmit(values, { setSubmitting });
             }}
           >
             {({ isSubmitting }) => (
@@ -103,8 +98,8 @@ function Login() {
                       </svg>
                     </span>
                   </div>
+                  <ErrorMessage name="email" component="div" />
                 </label>
-                <ErrorMessage name="email" component="div" />
                 <label htmlFor="password" className="text-sm font-medium">
                   Password
                   <div className="relative mt-1">
@@ -133,8 +128,8 @@ function Login() {
                       </svg>
                     </span>
                   </div>
+                  <ErrorMessage name="password" component="div" />
                 </label>
-                <ErrorMessage name="password" component="div" />
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -152,7 +147,7 @@ function Login() {
         ) : (
           <div className="p-8 mt-6 mb-0 space-y-4 rounded-xl shadow-2xl">
             <p className="text-center text-gray-500">
-              Logging in ...
+              Signing in ...
             </p>
           </div>
         )}
