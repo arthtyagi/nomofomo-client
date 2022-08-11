@@ -28,11 +28,14 @@ function Login() {
       const { email, password } = values;
       await logIn(email, password);
       setIsSubmitted(true);
+
       if (loginError) {
         setLoginError(false);
       }
+
       setSubmitting(false);
-      getUser().then((resp) => {
+
+      await getUser().then((resp) => {
         // add delay to simulate loading
         setTimeout(() => {
           dispatch({

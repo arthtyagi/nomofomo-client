@@ -9,8 +9,9 @@ userId
 */
 
 import React, {
-  useEffect, useReducer, createContext, useContext,
+  useReducer, createContext, useContext,
 } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
 import { getUser } from './AuthService';
 
@@ -30,22 +31,19 @@ function userReducer(state, action) {
 }
 
 export function UserProvider({ children }) {
+  const userQuery = useQuery(['user'], () => getUser());
   const [loggedInUser, dispatch] = useReducer(userReducer, {});
-  useEffect(
-    () => {
-      if (getUser() !== null) {
-        getUser().then((resp) => {
-          // console.log('userData ->', resp.data);
-          dispatch({ type: 'SET_USER_DATA', userData: resp.data });
-          localStorage.setItem('loggedIn', true);
-        }).catch(() => {
-          localStorage.setItem('loggedIn', false);
-          // console.log(error);
-        });
-      }
-    },
-    [],
-  );
+  // replace useEffect with useQuery
+  if (loggedInUser.data === undefined) {
+    if (userQuery.isSuccess && userQuery.data !== null) {
+      const userData = userQuery.data;
+      dispatch({
+        type: 'SET_USER_DATA',
+        userData: userData.data,
+      });
+      localStorage.setItem('loggedIn', true);
+    }
+  }
   return (
     <UserContext.Provider value={loggedInUser.data}>
       <UserDispatch.Provider value={dispatch}>
