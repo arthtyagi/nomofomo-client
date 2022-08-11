@@ -26,8 +26,8 @@ function userReducer(state, action) {
 }
 
 export function UserProvider({ children }) {
-  const userQuery = useQuery(['user'], () => getUser());
   const [loggedInUser, dispatch] = useReducer(userReducer, {});
+  const userQuery = useQuery(['user'], () => getUser());
   if (loggedInUser.data === undefined) {
     if (userQuery.isSuccess && userQuery.data !== null) {
       const userData = userQuery.data;
