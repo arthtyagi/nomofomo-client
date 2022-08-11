@@ -1,11 +1,6 @@
 /*
 Global Context:
-loggedIn
-loggedInUser
-username
-firstName
-lastName
-userId
+loggedInUser: username, id, email, firstName, lastName
 */
 
 import React, {
@@ -33,7 +28,6 @@ function userReducer(state, action) {
 export function UserProvider({ children }) {
   const userQuery = useQuery(['user'], () => getUser());
   const [loggedInUser, dispatch] = useReducer(userReducer, {});
-  // replace useEffect with useQuery
   if (loggedInUser.data === undefined) {
     if (userQuery.isSuccess && userQuery.data !== null) {
       const userData = userQuery.data;
