@@ -44,6 +44,11 @@ export function UserProvider({ children }) {
       localStorage.setItem('loggedInUser', JSON.stringify(userData.data));
     }
   }
+  if (userQuery.isError) {
+    localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh');
+  }
   return (
     <UserContext.Provider value={loggedInUser.data}>
       <UserDispatch.Provider value={dispatch}>
