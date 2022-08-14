@@ -60,7 +60,7 @@ export async function logOut() {
     // console.log('resp.data ->', resp.data);
     localStorage.removeItem('token');
     localStorage.removeItem('refresh');
-    localStorage.removeItem('loggedIn');
+    localStorage.removeItem('loggedInUser');
     window.location.href = '/';
   }).catch(() => {});
   return response;

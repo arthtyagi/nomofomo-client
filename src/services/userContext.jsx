@@ -28,14 +28,20 @@ function userReducer(state, action) {
 export function UserProvider({ children }) {
   const [loggedInUser, dispatch] = useReducer(userReducer, {});
   const userQuery = useQuery(['user'], () => getUser());
+  const localLoggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
   if (loggedInUser.data === undefined) {
-    if (userQuery.isSuccess && userQuery.data !== null) {
+    if (localLoggedInUser) {
+      dispatch({
+        type: 'SET_USER_DATA',
+        userData: localLoggedInUser,
+      });
+    } else if (userQuery.isSuccess && userQuery.data !== null) {
       const userData = userQuery.data;
       dispatch({
         type: 'SET_USER_DATA',
         userData: userData.data,
       });
-      localStorage.setItem('loggedIn', true);
+      localStorage.setItem('loggedInUser', JSON.stringify(userData.data));
     }
   }
   return (

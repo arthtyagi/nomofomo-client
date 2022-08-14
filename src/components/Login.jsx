@@ -42,10 +42,11 @@ function Login() {
             type: 'SET_USER_DATA',
             userData: resp.data,
           });
-          localStorage.setItem('loggedIn', true);
+          // persist user data in local storage
+          localStorage.setItem('loggedInUser', JSON.stringify(resp.data));
         }, 1000);
       }).catch(() => {
-        localStorage.setItem('loggedIn', false);
+        localStorage.removeItem('loggedInUser');
       });
     } catch (error) {
       setIsSubmitted(false);
