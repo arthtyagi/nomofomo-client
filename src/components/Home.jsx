@@ -1,12 +1,15 @@
 import { React } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUserContext } from '../services/userContext';
 import { logOut } from '../services/AuthService';
 
 function Home() {
   const loggedInUser = useUserContext();
+  const navigate = useNavigate();
   const handlelogOut = async () => {
-    await logOut();
+    await logOut().then(() => {
+      navigate(0);
+    });
   };
 
   return (

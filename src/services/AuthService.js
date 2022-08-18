@@ -71,7 +71,6 @@ export async function logOut() {
       localStorage.removeItem('token');
       localStorage.removeItem('refresh');
       localStorage.removeItem('loggedInUser');
-      window.location.href = '/';
     })
     .catch(() => {});
   return response;
