@@ -3,9 +3,7 @@ Global Context:
 loggedInUser: username, id, email, firstName, lastName
 */
 
-import React, {
-  useReducer, createContext, useContext,
-} from 'react';
+import React, { useReducer, createContext, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
 import { getUser } from './AuthService';
@@ -51,9 +49,7 @@ export function UserProvider({ children }) {
   }
   return (
     <UserContext.Provider value={loggedInUser.data}>
-      <UserDispatch.Provider value={dispatch}>
-        {children}
-      </UserDispatch.Provider>
+      <UserDispatch.Provider value={dispatch}>{children}</UserDispatch.Provider>
     </UserContext.Provider>
   );
 }

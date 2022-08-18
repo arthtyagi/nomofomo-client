@@ -35,19 +35,21 @@ function Login() {
 
       setSubmitting(false);
 
-      await getUser().then((resp) => {
-        // add delay to simulate loading
-        setTimeout(() => {
-          dispatch({
-            type: 'SET_USER_DATA',
-            userData: resp.data,
-          });
-          // persist user data in local storage
-          localStorage.setItem('loggedInUser', JSON.stringify(resp.data));
-        }, 1000);
-      }).catch(() => {
-        localStorage.removeItem('loggedInUser');
-      });
+      await getUser()
+        .then((resp) => {
+          // add delay to simulate loading
+          setTimeout(() => {
+            dispatch({
+              type: 'SET_USER_DATA',
+              userData: resp.data,
+            });
+            // persist user data in local storage
+            localStorage.setItem('loggedInUser', JSON.stringify(resp.data));
+          }, 1000);
+        })
+        .catch(() => {
+          localStorage.removeItem('loggedInUser');
+        });
     } catch (error) {
       setIsSubmitted(false);
       setLoginError(true);
@@ -56,20 +58,17 @@ function Login() {
   };
 
   return (
-    <div className="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
-      <div className="max-w-lg mx-auto">
-        <h1 className="text-3xl font-bold text-center text-black">Sign In</h1>
+    <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-lg">
+        <h1 className="text-center text-3xl font-bold text-black">Sign In</h1>
         <br />
-        {
-        loginError
-        && (
-        <div className="text-sm text-center text-red-500">
-          <p className="p-8 mt-6 mb-0 space-y-4 rounded-xl shadow-2xl">
-            Invalid username or password.
-          </p>
-        </div>
-        )
-        }
+        {loginError && (
+          <div className="text-center text-sm text-red-500">
+            <p className="mt-6 mb-0 space-y-4 rounded-xl p-8 shadow-2xl">
+              Invalid username or password.
+            </p>
+          </div>
+        )}
         {!isSubmitted && !loggedInUser ? (
           <Formik
             initialValues={{ email: '', password: '' }}
@@ -79,20 +78,21 @@ function Login() {
             }}
           >
             {({ isSubmitting }) => (
-              <Form className="p-8 mt-6 mb-0 space-y-4 rounded-xl shadow-2xl">
-                <label htmlFor="email" className="text-lg">
-                  Email
+              <Form className="mt-6 mb-0 space-y-4 rounded-xl p-8 shadow-2xl">
+                <label className="text-lg" htmlFor="email">
                   <div className="relative mt-1">
+                    Email
                     <Field
-                      className="w-full p-4 pr-12 text-sm border-gray-200 rounded-xl shadow-sm"
+                      className="w-full rounded-xl border-gray-200 p-4 pr-12 text-sm shadow-sm"
                       type="email"
                       name="email"
+                      id="email"
                       placeholder="Enter Email"
                     />
-                    <span className="absolute inset-y-0 inline-flex items-center right-4">
+                    <span className="absolute inset-y-0 right-4 inline-flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="w-5 h-5 text-gray-300"
+                        className="h-5 w-5 text-gray-300"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -106,20 +106,24 @@ function Login() {
                       </svg>
                     </span>
                   </div>
-                  <ErrorMessage name="email" component="div" className="text-red-400 text-sm" />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="text-sm text-red-400"
+                  />
                 </label>
                 <br />
-                <label htmlFor="password" className="text-lg">
+                <label className="text-lg" htmlFor="password">
                   Password
                   <div className="relative mt-1">
                     <Field
-                      className="w-full p-4 pr-12 text-sm border-gray-200 rounded-xl shadow-sm"
+                      className="w-full rounded-xl border-gray-200 p-4 pr-12 text-sm shadow-sm"
                       placeholder="Enter password"
                       type="password"
                       name="password"
                       id="password"
                     />
-                    <span className="absolute inset-y-0 inline-flex items-center right-4">
+                    <span className="absolute inset-y-0 right-4 inline-flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-6 w-6 text-gray-300"
@@ -137,12 +141,16 @@ function Login() {
                       </svg>
                     </span>
                   </div>
-                  <ErrorMessage name="password" component="div" className="text-red-400 text-sm" />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-sm text-red-400"
+                  />
                 </label>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="block w-full px-5 py-3 text-sm font-medium text-white bg-blue-600 rounded-xl"
+                  className="block w-full rounded-xl bg-blue-600 px-5 py-3 text-sm font-medium text-white"
                 >
                   <span>
                     SIGN IN
@@ -154,21 +162,23 @@ function Login() {
             )}
           </Formik>
         ) : (
-          <div className="p-8 mt-6 mb-0 space-y-4 rounded-xl shadow-2xl">
-            <p className="text-center text-gray-500">
-              Signing in ... 🚀
-            </p>
+          <div className="mt-6 mb-0 space-y-4 rounded-xl p-8 shadow-2xl">
+            <p className="text-center text-gray-500">Signing in ... 🚀</p>
           </div>
         )}
         <br />
         <p className="text-center text-gray-500">
           Open-source on
           {' '}
-          <a className="underline text-center" href="https://github.com/arthtyagi/nomofomo-client/">Github.</a>
+          <a
+            className="text-center underline"
+            href="https://github.com/arthtyagi/nomofomo-client/"
+          >
+            Github.
+          </a>
         </p>
       </div>
     </div>
-
   );
 }
 

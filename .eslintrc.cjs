@@ -20,6 +20,13 @@ module.exports = {
   rules: {
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'no-shadow': 'off',
+    'jsx-a11y/label-has-associated-control': [
+      'error',
+      {
+        controlComponents: ['Field', 'input'],
+        assert: 'both',
+      },
+    ],
     // "@typescript-eslint/no-shadow": ["error", , { "ignoreTypeValueShadow": true }]
   },
 };
